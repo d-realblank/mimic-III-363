@@ -50,7 +50,7 @@ brew install --cask microsoft-odbc-driver-18-for-sql-server
 
 2. **Create Python virtual environment:**
 ```bash
-cd /Users/dayveid/SOEN363Proj/migration
+cd migration
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
@@ -382,15 +382,15 @@ python validate_migration.py
 
 ## Additional Resources
 
-- **Full Documentation:** See `../MIGRATION_GUIDE.md`
-- **Implementation Notes:** See `../MIGRATION_IMPLEMENTATION_NOTES.md`
-- **SQL Schema:** See `../SQLqueries/createTables.sql`
-- **Import Scripts:** See `../SQLqueries/import*.sql` files
+- **Full Documentation:** See `MIGRATION_GUIDE.md`
+- **Implementation Notes:** See `MIGRATION_IMPLEMENTATION_NOTES.md`
+- **SQL Schema:** See `/SQLqueries/createTables.sql`
+- **Import Scripts:** See `/SQLqueries/import*.sql` files
 
 ## Support
 
 For issues or questions:
-1. Check `migration.log` for detailed error messages
+1. Check `/migration/migration.log` for detailed error messages
 2. Review `MIGRATION_GUIDE.md` for troubleshooting steps
 3. Verify database connections and credentials
 4. Ensure all prerequisites are installed
