@@ -303,7 +303,8 @@ In relational databases, we had 6 normalized tables with foreign keys. In MongoD
 - **Many-to-many relationships:** If diagnoses were shared across patients
 - **Real-time updates:** If admission data changed frequently post-creation
 
-**Our Use Case (Historical Medical Research):**
+**Our Assumed Use Case (Historical Medical Research):**
+From the nature of the data we assume it would be used for medical research.
 - ✓ Read-heavy workload (no new data being added)
 - ✓ Complete patient history needed for analysis
 - ✓ Small-to-medium document sizes

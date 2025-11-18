@@ -322,36 +322,32 @@ Top 5 ICU Units:
 
 ## Files Modified
 
-1. `/Users/dayveid/SOEN363Proj/migration/config.py`
+1. `/migration/config.py`
    - Fixed dotenv import
    - Corrected environment variable names
 
-2. `/Users/dayveid/SOEN363Proj/migration/extract_sql_data.py`
+2. `/migration/extract_sql_data.py`
    - Added return type to `connect()`
    - Added type guards to all fetch methods
 
-3. `/Users/dayveid/SOEN363Proj/migration/load_mongodb.py`
+3. `/migration/load_mongodb.py`
    - Fixed Optional type hint
    - Changed all `if not self.db` to `if self.db is None`
    - Added type guards to all insert methods
 
-4. `/Users/dayveid/SOEN363Proj/migration/migrate.py`
+4. `/migration/migrate.py`
    - Fixed datetime.utcnow() deprecation (2 locations)
    - Removed incorrect argument to SQLExtractor()
 
-5. `/Users/dayveid/SOEN363Proj/migration/transform_data.py`
+5. `/migration/transform_data.py`
    - Fixed datetime.utcnow() deprecation in metadata
 
-6. `/Users/dayveid/SOEN363Proj/migration/validate_migration.py`
+6. `/migration/validate_migration.py`
    - Removed incorrect argument to SQLExtractor()
    - Changed all 6 MongoDB db checks to `is None` (validate_sample_patients, validate_embedded_data, validate_data_integrity x2, validate_indexes x2)
    - Fixed final truthiness issues after initial migration completed
 
-7. `/Users/dayveid/SOEN363Proj/.vscode/settings.json`
-   - Added Python interpreter path
-   - Added analysis extra paths
-
-8. `/Users/dayveid/SOEN363Proj/migration/.env`
+7. `/migration/.env`
    - Updated from .env.example
    - Configured with actual SQL Server password from Docker
 
@@ -388,17 +384,16 @@ python migrate.py
 
 ## Success Criteria Met
 
-✅ All 10,000 patients migrated successfully  
-✅ All 14,567 ICD codes migrated successfully  
-✅ Zero data loss (row counts match)  
-✅ Embedded document structure properly created (12,911 admissions embedded)  
-✅ 6 indexes created successfully on patients collection  
-✅ **All validation tests passed (6/6)**  
-✅ Performance within expected range (30-35 patients/sec)  
-✅ Complete documentation of process  
-✅ All scripts reproducible  
-✅ Data integrity verified (no NULLs, no duplicates)  
-✅ Sample patient verification passed (10/10)  
+All 10,000 patients migrated successfully  
+All 14,567 ICD codes migrated successfully  
+Zero data loss (row counts match)  
+Embedded document structure properly created (12,911 admissions embedded)  
+6 indexes created successfully on patients collection  
+✅ **All validation tests passed (6/6)**   
+Complete documentation of process  
+All scripts reproducible  
+Data integrity verified (no NULLs, no duplicates)  
+Sample patient verification passed (10/10)  
 
 ---
 
@@ -406,25 +401,25 @@ python migrate.py
 
 ### All Tests Passed: 6/6 ✅
 
-#### Test 1: Row Count Validation ✅
+#### Test 1: Row Count Validation
 - **Patients**: SQL=10,000, MongoDB=10,000 [PASS]
 - **ICD Diagnoses**: SQL=14,567, MongoDB=14,567 [PASS]
 
-#### Test 2: Sample Patient Validation (n=10) ✅
+#### Test 2: Sample Patient Validation (n=10)
 - All 10 randomly selected patients verified
 - Demographics match between SQL and MongoDB
 - Admission counts match for all samples
 
-#### Test 3: Embedded Data Validation ✅
+#### Test 3: Embedded Data Validation
 - **Admissions**: SQL=12,911, MongoDB=12,911 (embedded) [PASS]
 - All admissions successfully embedded in patient documents
 
-#### Test 4: Data Integrity Validation ✅
-- ✓ No NULL patient_ids found
-- ✓ No duplicate patient_ids found
-- ✓ All patients have demographics
+#### Test 4: Data Integrity Validation
+- No NULL patient_ids found
+- No duplicate patient_ids found
+- All patients have demographics
 
-#### Test 5: Index Validation ✅
+#### Test 5: Index Validation
 - **Total Indexes Created**: 6
   1. `_id_` - Default MongoDB index
   2. `patient_id_1` - Unique patient identifier (primary key)
@@ -464,6 +459,5 @@ Embedded in patients documents:
 1. **Re-running Migration**: Safe to re-run, uses upsert operations
 2. **Validation**: Run `python validate_migration.py` anytime (all 6 tests pass)
 3. **Querying Data**: Use `mongosh mimic_iii_nosql` for interactive queries
-4. **Backup**: Run `mongodump --db mimic_iii_nosql --out /backup/path`
-5. **Monitoring**: Check `migration.log` for detailed execution logs
-6. **Performance Testing**: Use validation script to verify query performance on indexes
+4. **Monitoring**: Check `migration.log` for detailed execution logs
+5. **Performance Testing**: Use validation script to verify query performance on indexes
