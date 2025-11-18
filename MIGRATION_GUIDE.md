@@ -21,6 +21,32 @@ Migrate the MIMIC-III medical database from a relational SQL Server structure to
 - Performance differences between relational and NoSQL databases
 - Document-based query patterns
 
+### Why Document Database for Medical Data?
+
+**Rationale for MongoDB Selection:**
+
+Medical records are inherently hierarchical with variable-length relationships. A document database provides optimal alignment with this data structure compared to other NoSQL approaches:
+
+**Document Database Advantages:**
+- **Natural hierarchy representation:** Patient → Admissions → Diagnoses → Notes maps directly to nested documents
+- **Single-query retrieval:** Complete patient history accessible without joins or multiple lookups
+- **Schema flexibility:** Variable admission counts (1-10+) and optional fields handled natively without NULL proliferation
+- **Read optimization:** Historical research workloads benefit from document co-location and single I/O operations
+- **Aggregation capabilities:** Rich pipeline operations for complex analytics on nested data structures
+
+**Alternative NoSQL Types Considered:**
+
+- **Key-Value Stores (Redis, DynamoDB):** Insufficient query capabilities for nested medical data; would require application-level joins
+- **Column-Family Stores (Cassandra, HBase):** Optimized for write-heavy time-series; over-engineered for read-focused historical analysis
+- **Graph Databases (Neo4j):** Better suited for network relationships; unnecessary complexity for hierarchical parent-child structures
+
+**Trade-offs Accepted:**
+- Data duplication (ICD code titles repeated) exchanged for query performance
+- No ACID transactions across patients (acceptable for immutable historical data)
+- Larger individual document sizes (60KB average) vs. normalized storage efficiency
+
+**Conclusion:** Document databases align with medical record structure, access patterns, and research query requirements, making MongoDB the optimal choice for this migration.
+
 ### Migration Scope
 - **Source:** SQL Server with 6 normalized tables
 - **Target:** MongoDB with 1 denormalized collection (patient-centric)
