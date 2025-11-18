@@ -1,0 +1,41 @@
+# Environment variables
+.env
+*.env
+.env.*
+
+# Logs
+*.log
+migration.log
+*.log.*
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# SQL Server Project
+SOEN363/
+SOEN363.sqlproj
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# MongoDB backups
+/tmp/mongodb_backup/
+*.bson
+*.metadata.json
+
+# OS
+.DS_Store
+Thumbs.db
