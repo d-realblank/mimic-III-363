@@ -9,10 +9,6 @@ from pymongo import MongoClient, ASCENDING
 from pymongo.errors import BulkWriteError, DuplicateKeyError
 from config import MONGODB_CONFIG, MONGODB_INDEXES
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 

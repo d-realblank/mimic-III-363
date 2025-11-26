@@ -12,10 +12,6 @@ from config import get_sql_connection_string
 from extract_sql_data import SQLExtractor
 from load_mongodb import MongoDBLoader
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 

@@ -9,10 +9,6 @@ from datetime import datetime
 from typing import List, Dict, Any, Optional
 from config import get_sql_connection_string, SQL_QUERIES
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 
