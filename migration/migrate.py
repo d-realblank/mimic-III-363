@@ -160,7 +160,7 @@ class MigrationOrchestrator:
     def validate_migration(self) -> bool:
         """Basic validation of migration results."""
         logger.info("=" * 80)
-        logger.info("Phase 4: Validation")
+        logger.info("Phase 3: Validation")
         logger.info("=" * 80)
         
         try:
