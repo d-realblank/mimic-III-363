@@ -36,7 +36,6 @@ class MigrationOrchestrator:
         self.stats = {
             'patients_processed': 0,
             'patients_migrated': 0,
-            'icd_codes_migrated': 0,
             'errors': 0,
             'start_time': None,
             'end_time': None
@@ -168,27 +167,21 @@ class MigrationOrchestrator:
             # Get counts from both databases
             sql_counts = self.sql_extractor.get_table_counts()
             mongo_patient_count = self.mongo_loader.get_collection_count('patients')
-            mongo_icd_count = self.mongo_loader.get_collection_count('icd_diagnoses')
             
             logger.info("Row/Document Counts:")
             logger.info(f"  SQL Patients: {sql_counts.get('Patients', 0)}")
             logger.info(f"  MongoDB Patients: {mongo_patient_count}")
-            logger.info(f"  SQL ICD Diagnoses: {sql_counts.get('ICD_Diagnosis', 0)}")
-            logger.info(f"  MongoDB ICD Diagnoses: {mongo_icd_count}")
             
             # Basic validation
             patients_match = sql_counts.get('Patients', 0) == mongo_patient_count
-            icd_match = sql_counts.get('ICD_Diagnosis', 0) == mongo_icd_count
             
-            if patients_match and icd_match:
+            if patients_match:
                 logger.info("✓ Validation passed: counts match")
                 return True
             else:
                 logger.warning("⚠ Validation warning: counts do not match")
                 if not patients_match:
                     logger.warning(f"  Patient count mismatch: SQL={sql_counts.get('Patients', 0)}, MongoDB={mongo_patient_count}")
-                if not icd_match:
-                    logger.warning(f"  ICD count mismatch: SQL={sql_counts.get('ICD_Diagnosis', 0)}, MongoDB={mongo_icd_count}")
                 return False
                 
         except Exception as e:
@@ -206,7 +199,6 @@ class MigrationOrchestrator:
         logger.info("=" * 80)
         logger.info(f"Patients Processed: {self.stats['patients_processed']}")
         logger.info(f"Patients Migrated: {self.stats['patients_migrated']}")
-        logger.info(f"ICD Codes Migrated: {self.stats['icd_codes_migrated']}")
         logger.info(f"Errors: {self.stats['errors']}")
         if duration:
             logger.info(f"Duration: {duration:.2f} seconds")

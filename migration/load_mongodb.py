@@ -77,15 +77,6 @@ class MongoDBLoader:
                 )
                 logger.info(f"Created index on patients: {index_spec['keys']}")
             
-            # ICD reference collection indexes
-            icd_col = self.db['icd_diagnoses']
-            for index_spec in MONGODB_INDEXES['icd_diagnoses']:
-                icd_col.create_index(
-                    index_spec['keys'],
-                    unique=index_spec.get('unique', False)
-                )
-                logger.info(f"Created index on icd_diagnoses: {index_spec['keys']}")
-            
             logger.info("All indexes created successfully")
             return True
         except Exception as e:
@@ -211,9 +202,7 @@ if __name__ == "__main__":
         
         # Test getting counts
         patients_count = loader.get_collection_count('patients')
-        icd_count = loader.get_collection_count('icd_diagnoses')
         print(f"Patients collection: {patients_count} documents")
-        print(f"ICD Diagnoses collection: {icd_count} documents")
         
         # Test sample retrieval
         if patients_count > 0:

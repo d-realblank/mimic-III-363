@@ -240,6 +240,12 @@ self.db = None
 self.db: Optional[Any] = None
 ```
 
+### 8. Removal of ICD Reference Collection
+**Decision**: Removed `icd_diagnoses` reference collection from migration.
+**Reason**: ICD diagnosis details (`short_title`, `long_title`) are already embedded directly within the patient admission records due to the SQL JOIN in the extraction phase.
+**Benefit**: Simplifies the migration process and reduces storage redundancy, as the application logic does not currently require a standalone lookup for ICD codes.
+**Impact**: `validate_migration.py` no longer checks for `icd_diagnoses` counts.
+
 ---
 
 ## Prerequisites Verified

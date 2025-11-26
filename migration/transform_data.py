@@ -23,6 +23,23 @@ class DataTransformer:
         if value is None or value == '':
             return None
         return str(value).strip()
+
+    @staticmethod
+    def clean_text_content(value: Optional[str]) -> Optional[str]:
+        """
+        Clean text content, removing wrapping quotes and whitespace.
+        Preserves internal newlines which are beneficial for formatting.
+        """
+        if value is None or value == '':
+            return None
+        
+        value = str(value).strip()
+        
+        # Remove wrapping double quotes if present (common CSV import artifact)
+        if len(value) >= 2 and value.startswith('"') and value.endswith('"'):
+            value = value[1:-1]
+            
+        return value.strip()
     
     @staticmethod
     def parse_boolean(value: Optional[str]) -> bool:
@@ -89,7 +106,7 @@ class DataTransformer:
             'create_time': self.safe_datetime(note.get('create_time')),
             'category': self.clean_string(note.get('category')),
             'description': self.clean_string(note.get('description')),
-            'text': self.clean_string(note.get('text')),
+            'text': self.clean_text_content(note.get('text')),
             'is_error': self.parse_boolean(note.get('is_error'))
         }
     
