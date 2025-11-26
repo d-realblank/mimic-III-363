@@ -1,3 +1,12 @@
+# MIMIC-III SQL to NoSQL Migration Project
+
+## Project Status & Roadmap
+
+**Current Status:** **Migration Complete & Validated**
+Successfully migrated 10,000 patients from SQL Server to MongoDB with 100% data integrity. Remote deployment to MongoDB Atlas is active (partial dataset due to free tier limits).
+
+---
+
 # MIMIC-III NoSQL Migration Scripts
 
 This directory contains Python scripts for migrating MIMIC-III medical data from SQL Server to MongoDB.
@@ -7,7 +16,7 @@ This directory contains Python scripts for migrating MIMIC-III medical data from
 The migration transforms a normalized relational schema (6 tables with foreign keys) into a document-oriented NoSQL database with a patient-centric design:
 
 - **SQL Server:** 6 normalized tables (Patients, Admissions, ICU_Stays, Diagnosis, ICD_Diagnosis, Note_Events)
-- **MongoDB:** 2 collections (patients with embedded documents, icd_diagnoses reference data)
+- **MongoDB:** 1 collection (`patients`) with fully embedded medical history (admissions, ICU stays, diagnoses, notes)
 
 ## Prerequisites
 
@@ -139,13 +148,6 @@ Run migration without validation:
 python migrate.py --no-validate
 ```
 
-### Partial Migration
-
-Migrate only ICD reference data:
-```bash
-python migrate.py --icd-only
-```
-
 ### Validation Only
 
 Run validation suite after migration:
@@ -172,14 +174,9 @@ python load_mongodb.py
 
 ## Migration Process
 
-The migration follows this 4-phase process:
+The migration follows this 3-phase process:
 
-### Phase 1: ICD Reference Data
-- Extracts all ICD-9 diagnosis codes from SQL Server
-- Transforms into reference documents
-- Loads into `icd_diagnoses` collection
-
-### Phase 2: Patient Data
+### Phase 1: Patient Data Migration
 - Iterates through all patients
 - For each patient:
   1. Fetches all admissions
@@ -188,12 +185,12 @@ The migration follows this 4-phase process:
   4. Embeds all related data
 - Batch inserts into `patients` collection
 
-### Phase 3: Index Creation
+### Phase 2: Index Creation
 - Creates indexes on `patient_id` (unique)
 - Creates indexes on `icd9_code` (unique)
 - Additional indexes for common query patterns
 
-### Phase 4: Validation
+### Phase 3: Validation
 - Compares row/document counts
 - Validates sample patient records
 - Checks embedded data counts
@@ -270,7 +267,7 @@ If migration fails or produces incorrect results:
 
 1. **Drop MongoDB collections:**
 ```bash
-mongosh mimic_iii_nosql --eval "db.patients.drop(); db.icd_diagnoses.drop();"
+mongosh mimic_iii_nosql --eval "db.patients.drop();"
 ```
 
 2. **Re-run migration:**
@@ -283,8 +280,7 @@ The migration is idempotent - it uses upsert operations, so it's safe to re-run.
 ## Performance
 
 Actual performance (tested on Apple M1/M2):
-- **14,567 ICD codes:** ~250ms (Phase 1)
-- **10,000 patients:** ~5 minutes (Phase 2)
+- **10,000 patients:** ~5 minutes
 - **Rate:** 30-35 patients/second with embedded data
 - **Total migration time:** ~5-6 minutes including validation
 
@@ -355,7 +351,6 @@ Factors affecting performance:
 
 ### Migration Statistics (Actual Results)
 - **Total Patients**: 10,000
-- **Total ICD Codes**: 14,567
 - **Total Admissions**: 12,911 (embedded)
 - **Male Patients**: 5,615
 - **Female Patients**: 4,385
@@ -372,7 +367,7 @@ python validate_migration.py
 ```
 
 **Expected Results (All Tests Pass):**
-- Test 1: Row Count Validation - Patients and ICD codes match
+- Test 1: Row Count Validation - Patients match
 - Test 2: Sample Patient Validation - 10 random patients verified
 - Test 3: Embedded Data Validation - 12,911 admissions correctly embedded
 - Test 4: Data Integrity Validation - No NULLs, no duplicates
